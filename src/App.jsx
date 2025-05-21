@@ -1,32 +1,31 @@
 import './App.css'
+import { useState, useEffect } from 'react'
 import { Card } from './Card/Card'
 
 function App() {
-  let cardCount = 12;
-  const mons = [];
+  const cardCount = 12;
+  const [mons, setMons] = useState([]);
 
-  async function getCards(cardCount) {
-    let totalMons = await getPokemonCount();
+  useEffect(() => {
+    async function loadCards() {
+      let totalMons = await getPokemonCount();
+      const randomIds = new Set()
 
-    const randomIds = new Set()
-
-    //get cardCount number of random dex numbers
-    while (randomIds.size < cardCount) {
-      let r = Math.floor(Math.random() * totalMons) + 1;
-      randomIds.add(r);
-
-      if (mons.indexOf(r) === -1) {
-        console.log("r: " + r);
-        let mon = await getRandomPokemon(r);
-        mons.push(mon);
+      while (randomIds.size < cardCount) {
+        let r = Math.floor(Math.random() * totalMons) + 1;
+        randomIds.add(r);
       }
+
+      const promises = Array.from(randomIds).map(id => getRandomPokemon(id));
+      const monData = await Promise.all(promises);
+
+      monData.forEach(mon => mon.index = crypto.randomUUID());
+
+      setMons(monData);
     }
+    loadCards();
+  }, []);
 
-    const promises = Array.from(randomIds).map(id => getRandomPokemon(id));
-    const monData = await Promise.all(promises);
-
-    return monData;
-  }
 
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
@@ -46,11 +45,11 @@ function App() {
     return { name: data.name, types: data.types.map(t => t.type.name), sprite: data.sprites.front_default };
   }
 
-  console.log(getCards(cardCount));
-
   return (
     <>
-      <Card />
+      {mons.map((mon) => (
+        <Card key={mon.index} mon={mon} />
+      ))}
     </>
   )
 }
