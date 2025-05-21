@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
 .Card {
     display: flex;
     flex-direction: column;
@@ -10,6 +12,7 @@
     text-align: center;
     padding: 1rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: "Jost", sans-serif;
 }
 
 .Card:hover {
