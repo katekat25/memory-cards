@@ -5,6 +5,8 @@ import { Card } from './Card/Card'
 function App() {
   const cardCount = 12;
   const [mons, setMons] = useState([]);
+  const [loaded, setLoaded] = useState(false);
+  const [loadedCount, setLoadedCount] = useState(0);
 
   useEffect(() => {
     async function loadCards() {
@@ -26,6 +28,11 @@ function App() {
     loadCards();
   }, []);
 
+  useEffect(() => {
+    if (loadedCount === cardCount) {
+      setLoaded(true);
+    }
+  }, [loadedCount]);
 
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
@@ -47,12 +54,23 @@ function App() {
     return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.front_default };
   }
 
-  return (
+  const cards =
     <div className="card-container">
       {mons.map((mon) => (
-        <Card key={mon.index} mon={mon} />
+        <Card
+          key={mon.index}
+          mon={mon}
+          onLoad={() => { setLoadedCount(prev => prev + 1); }}
+        />
       ))}
     </div>
+
+  return (
+    <>
+      <div style={{ display: loaded ? 'block' : 'none' }}>
+        {cards}
+      </div>
+    </>
   )
 }
 

@@ -1,6 +1,7 @@
 import './Card.css'
 
-function Card({ mon }) {
+function Card({ mon, onLoad }) {
+
     const typeColors = {
         normal: "A8A77A",
         fire: "EE8130",
@@ -35,7 +36,11 @@ function Card({ mon }) {
     }
 
     return <div className="Card" style={getBackgroundStyle()}>
-        <img src={`${mon.sprite}`} />
+        <img
+            src={mon.sprite}
+            alt={mon.name}
+            onLoad={onLoad}
+        />
         <p>{mon.name.toUpperCase()}</p>
     </div>
 }
