@@ -42,7 +42,9 @@ function App() {
       throw new Error(`Error fetching Pokemon, status: ${response.status}`)
     }
     const data = await response.json();
-    return { name: data.name, types: data.types.map(t => t.type.name), sprite: data.sprites.front_default };
+
+    const unhyphenatedName = data.name.replace("-", " ");
+    return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.front_default };
   }
 
   return (

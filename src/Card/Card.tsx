@@ -36,6 +36,7 @@ function Card({ mon }) {
 
     return <div className="Card" style={getBackgroundStyle()}>
         <img src={`${mon.sprite}`} />
+        <p>{mon.name.toUpperCase()}</p>
     </div>
 }
 
