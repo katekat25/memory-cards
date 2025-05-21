@@ -46,11 +46,11 @@ function App() {
   }
 
   return (
-    <>
+    <div className="card-container">
       {mons.map((mon) => (
         <Card key={mon.index} mon={mon} />
       ))}
-    </>
+    </div>
   )
 }
 
