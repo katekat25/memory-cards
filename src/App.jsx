@@ -1,3 +1,19 @@
+//todos:
+//can we just make this a fucking normal memory game please? ~we have the technology~
+//make modal slide in that explains rules
+
+//to make it normal memory:
+//get half the number of pokemon as there are cardCount, then duplicate each pokemon
+//shuffle all the pokemon randomly
+//start them all face down
+//cards store a flipped status
+//track score in App
+//when a pair is matched, remove the cards from the game but keep a space where they were
+//add reset game button, etc
+
+//add japanese support!
+//add dark mode support?
+
 import './App.css'
 import { useState, useEffect } from 'react'
 import { Card } from './Card/Card'
