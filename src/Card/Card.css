@@ -12,21 +12,31 @@
 
 .Card {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-    height: 100px;
-    width: 75px;
+    height: 125px;
+    width: 100px;
     text-align: center;
-    padding: 1rem;
+    padding:.5rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     font-family: "Jost", sans-serif;
     will-change: transform;
     opacity: 0;
     animation: fade-in .25s ease-in-out forwards;
+    font-size: .75rem;
+    overflow: hidden;
+}
+
+.Card:hover {
+    transform: scale(1.1);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    z-index: 2;
 }
 
 .Card > img {
-    /* display: none; */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }

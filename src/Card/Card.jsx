@@ -43,7 +43,6 @@ function Card({ mon, onLoad, style }) {
             alt={mon.name}
             onLoad={onLoad}
         />
-        <p>{mon.name.toUpperCase()}</p>
     </div>
 }
 

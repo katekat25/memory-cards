@@ -1,8 +1,8 @@
 .card-container {
-  width: 80%;
+  width: auto;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
+  gap: 5px;
   margin: 0;
   position: absolute;
   top: 50%;
