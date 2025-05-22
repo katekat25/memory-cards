@@ -24,17 +24,27 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [loadedCount, setLoadedCount] = useState(0);
 
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
   useEffect(() => {
     async function loadCards() {
       let totalMons = await getPokemonCount();
       const randomIds = new Set()
 
-      while (randomIds.size < cardCount) {
+      while (randomIds.size < (cardCount / 2)) {
         let r = Math.floor(Math.random() * totalMons) + 1;
         randomIds.add(r);
       }
 
-      const promises = Array.from(randomIds).map(id => getRandomPokemon(id));
+      const duplicatedIds = Array.from(randomIds).flatMap(id => [id, id]);
+      const shuffledIds = shuffleArray(duplicatedIds);
+      const promises = shuffledIds.map(id => getRandomPokemon(id));
       const monData = await Promise.all(promises);
 
       monData.forEach(mon => mon.index = crypto.randomUUID());
