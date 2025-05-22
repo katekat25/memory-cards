@@ -20,6 +20,7 @@ function App() {
   const cardCount = 24;
   const [mons, setMons] = useState([]);
   const [isFaceDown, setFaceDown] = useState(true);
+  const [flippedCards, setFlippedCards] = useState(Array(cardCount).fill(false));
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -78,10 +79,14 @@ function App() {
           key={mon.index}
           mon={mon}
           style={{ animationDelay: `${index * 0.025}s` }}
-          isFaceDown={isFaceDown}
+          isFaceDown={!flippedCards[index]}
           onClick={() => {
-            console.log("Clicked");
-            setFaceDown(false);
+            console.log(`Clicked card ${index}`);
+            setFlippedCards(prev => {
+              const newFlips = [...prev];
+              newFlips[index] = true;
+              return newFlips;
+            });
           }}
         />
       ))}
