@@ -39,17 +39,18 @@ function Card({ mon, style, isFaceDown, onClick }) {
     }
 
     return (
-        isFaceDown ? (
-            <div className="Card facedown confetti" onClick={onClick} style={style}></div>
-        ) : (
-            <div className="Card faceup confetti" style={{ ...getBackgroundStyle(), ...style }}>
-                <img
-                    src={mon.sprite}
-                    alt={mon.name}
-                />
+        <div className={`card ${isFaceDown ? 'flipped' : ''}`} style={style} onClick={onClick}>
+            <div className="card-inner">
+                <div className="card-face front" style={getBackgroundStyle()}>
+                    <img src={mon.sprite} alt={mon.name} />
+                </div>
+                <div className="card-face back">
+                    ❓
+                </div>
             </div>
-        )
+        </div>
     );
 }
+
 
 export { Card };
