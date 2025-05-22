@@ -1,7 +1,6 @@
-import './Card.css'
+import './Card.css';
 
-function Card({ mon, onLoad, style }) {
-
+function Card({ mon, onLoad, style, isFaceDown, onClick }) {
     const typeColors = {
         normal: "A8A77A",
         fire: "EE8130",
@@ -32,18 +31,26 @@ function Card({ mon, onLoad, style }) {
             return {
                 background: `linear-gradient(#${hex1}, #${hex2})`
             };
-        } else return { backgroundColor: `#${typeColors[mon.types[0]]}` };
+        } else {
+            return {
+                backgroundColor: `#${typeColors[mon.types[0]]}`
+            };
+        }
     }
 
-    console.log(style);
-
-    return <div className="Card" style={{...getBackgroundStyle(), ...style}}>
-        <img
-            src={mon.sprite}
-            alt={mon.name}
-            onLoad={onLoad}
-        />
-    </div>
+    return (
+        isFaceDown ? (
+            <div className="Card facedown" onClick={onClick}></div>
+        ) : (
+            <div className="Card faceup" style={{ ...getBackgroundStyle(), ...style }}>
+                <img
+                    src={mon.sprite}
+                    alt={mon.name}
+                    onLoad={onLoad}
+                />
+            </div>
+        )
+    );
 }
 
-export { Card }
+export { Card };

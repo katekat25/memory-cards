@@ -3,8 +3,6 @@
 //make modal slide in that explains rules
 
 //to make it normal memory:
-//get half the number of pokemon as there are cardCount, then duplicate each pokemon
-//shuffle all the pokemon randomly
 //start them all face down
 //cards store a flipped status
 //track score in App
@@ -21,8 +19,7 @@ import { Card } from './Card/Card'
 function App() {
   const cardCount = 24;
   const [mons, setMons] = useState([]);
-  const [loaded, setLoaded] = useState(false);
-  const [loadedCount, setLoadedCount] = useState(0);
+  const [isFaceDown, setFaceDown] = useState(true);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -54,12 +51,6 @@ function App() {
     loadCards();
   }, []);
 
-  useEffect(() => {
-    if (loadedCount === cardCount) {
-      setLoaded(true);
-    }
-  }, [loadedCount]);
-
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
     if (!response.ok) {
@@ -80,27 +71,25 @@ function App() {
     return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.other["official-artwork"].front_default };
   }
 
-  function getCardDelay() {
-
-  }
-
   const cards =
     <div className="card-container">
       {mons.map((mon, index) => (
         <Card
           key={mon.index}
           mon={mon}
-          onLoad={() => { setLoadedCount(prev => prev + 1); }}
           style={{ animationDelay: `${index * 0.025}s` }}
+          isFaceDown={isFaceDown}
+          onClick={() => {
+            console.log("Clicked");
+            setFaceDown(false);
+          }}
         />
       ))}
     </div>
 
   return (
     <>
-      <div style={{ display: loaded ? 'block' : 'none' }}>
-        {cards}
-      </div>
+      {cards}
     </>
   )
 }
