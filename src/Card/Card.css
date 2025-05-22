@@ -27,6 +27,10 @@
     animation: fade-in .25s ease-in-out forwards;
 }
 
+.Card > img {
+    /* display: none; */
+}
+
 .Card:hover {
     transform: scale(1.05);
 }

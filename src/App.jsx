@@ -67,7 +67,7 @@ function App() {
     const data = await response.json();
 
     const unhyphenatedName = data.name.replace("-", " ");
-    return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.front_default };
+    return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.other["official-artwork"].front_default };
   }
 
   const cards =
