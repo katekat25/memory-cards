@@ -3,10 +3,7 @@
 //make modal slide in that explains rules
 
 //to make it normal memory:
-//start them all face down
-//cards store a flipped status
 //track score in App
-//when a pair is matched, remove the cards from the game but keep a space where they were
 //add reset game button, etc
 
 //add japanese support!
@@ -15,12 +12,18 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { Card } from './Card/Card'
+import { useWindowSize } from 'react-use'
+import Confetti from 'react-confetti'
 
 function App() {
   const cardCount = 24;
+  const { width, height } = useWindowSize();
+
   const [mons, setMons] = useState([]);
   const [cardFlips, setCardFlips] = useState(Array(cardCount).fill(false));
   const [matchedCards, setMatchedCards] = useState(Array(cardCount).fill(false));
+  const [isExploding, setIsExploding] = useState(false);
+  const [confettiOrigin, setConfettiOrigin] = useState({ x: width / 2, y: height / 2 });
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -42,6 +45,7 @@ function App() {
       const secondCard = mons[secondIndex];
 
       if (firstCard && secondCard && firstCard.name === secondCard.name) {
+        setIsExploding(true);
         setMatchedCards(prev => {
           const newMatches = [...prev];
           newMatches[firstIndex] = true;
@@ -61,14 +65,14 @@ function App() {
     }
   }, [cardFlips, mons, matchedCards]);
 
-function preloadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.src = src;
-    img.onload = resolve;
-    img.onerror = reject;
-  })
-}
+  function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = resolve;
+      img.onerror = reject;
+    })
+  }
 
   useEffect(() => {
     async function loadCards() {
@@ -92,6 +96,15 @@ function preloadImage(src) {
     }
     loadCards();
   }, []);
+
+  // useEffect(() => {
+  //   if (isExploding) {
+  //     const timeout = setTimeout(() => {
+  //       setIsExploding(false);
+  //     }, 500); // 500ms burst duration
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [isExploding]);
 
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
@@ -121,23 +134,38 @@ function preloadImage(src) {
           mon={mon}
           style={{ animationDelay: `${index * 0.025}s` }}
           isFaceDown={!cardFlips[index]}
-          onClick={() => {
+          onClick={(e) => {
             console.log(`Clicked card ${index}`);
+            const x = e.clientX;
+            const y = e.clientY;
             setCardFlips(prev => {
               const newFlips = [...prev];
               newFlips[index] = true;
               return newFlips;
             });
+            setConfettiOrigin({ x, y });
           }}
         />
       ))}
     </div>
 
-  return (
-    <>
-      {cards}
-    </>
-  )
+  return <>
+    {isExploding && (
+      <Confetti
+        width={width}
+        height={height}
+        confettiSource={{ x: confettiOrigin.x, y: confettiOrigin.y, w: 0, h: 0 }}
+        numberOfPieces={50}     
+        gravity={.3}             
+        initialVelocity={{ x:200, y: 200 }} 
+        friction={1.01}
+        recycle={false}
+        tweenDuration={100}
+        onConfettiComplete={() => setIsExploding(false)}
+      />
+    )}
+    {cards}
+  </>
 }
 
 export default App
