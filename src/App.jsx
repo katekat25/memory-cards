@@ -19,8 +19,8 @@ import { Card } from './Card/Card'
 function App() {
   const cardCount = 24;
   const [mons, setMons] = useState([]);
-  const [isFaceDown, setFaceDown] = useState(true);
-  const [flippedCards, setFlippedCards] = useState(Array(cardCount).fill(false));
+  const [cardFlips, setCardFlips] = useState(Array(cardCount).fill(false));
+  const [matchedCards, setMatchedCards] = useState(Array(cardCount).fill(false));
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -29,6 +29,40 @@ function App() {
     }
     return array;
   }
+
+  useEffect(() => {
+    let flippedIndexes = cardFlips.reduce((acc, flipped, index) => {
+      if (flipped && matchedCards[index] === false) acc.push(index);
+      return acc;
+    }, []);
+
+    console.log(flippedIndexes);
+
+    if (flippedIndexes.length === 2) {
+      const [firstIndex, secondIndex] = flippedIndexes;
+      const firstCard = mons[firstIndex];
+      const secondCard = mons[secondIndex];
+      
+      if (firstCard && secondCard && firstCard.name === secondCard.name) {
+        console.log("Match!");
+        setMatchedCards(prev => {
+          const newMatches = [...prev];
+          newMatches[firstIndex] = true;
+          newMatches[secondIndex] = true;
+          return newMatches;
+        })
+      } else {
+        setTimeout(() => {
+        setCardFlips(prev => {
+          const newFlips = [...prev];
+          newFlips[firstIndex] = false;
+          newFlips[secondIndex] = false;
+          return newFlips;
+        });
+      }, 1000);
+      }
+    }
+  }, [cardFlips, mons]);
 
   useEffect(() => {
     async function loadCards() {
@@ -79,10 +113,10 @@ function App() {
           key={mon.index}
           mon={mon}
           style={{ animationDelay: `${index * 0.025}s` }}
-          isFaceDown={!flippedCards[index]}
+          isFaceDown={!cardFlips[index]}
           onClick={() => {
             console.log(`Clicked card ${index}`);
-            setFlippedCards(prev => {
+            setCardFlips(prev => {
               const newFlips = [...prev];
               newFlips[index] = true;
               return newFlips;
