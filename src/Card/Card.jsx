@@ -1,6 +1,6 @@
 import './Card.css'
 
-function Card({ mon, onLoad }) {
+function Card({ mon, onLoad, style }) {
 
     const typeColors = {
         normal: "A8A77A",
@@ -35,7 +35,9 @@ function Card({ mon, onLoad }) {
         } else return { backgroundColor: `#${typeColors[mon.types[0]]}` };
     }
 
-    return <div className="Card" style={getBackgroundStyle()}>
+    console.log(style);
+
+    return <div className="Card" style={{...getBackgroundStyle(), ...style}}>
         <img
             src={mon.sprite}
             alt={mon.name}

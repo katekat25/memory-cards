@@ -16,8 +16,8 @@
     justify-content: center;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
-    height: 200px;
-    width: 125px;
+    height: 100px;
+    width: 75px;
     text-align: center;
     padding: 1rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -29,52 +29,4 @@
 
 .Card > img {
     /* display: none; */
-}
-
-.Card:hover {
-    transform: scale(1.05);
-}
-
-.Card:nth-child(2) {
-    animation-delay: .05s;
-}
-
-.Card:nth-child(3) {
-    animation-delay: .1s;
-}
-
-.Card:nth-child(4) {
-    animation-delay: .15s;
-}
-
-.Card:nth-child(5) {
-    animation-delay: .2s;
-}
-
-.Card:nth-child(6) {
-    animation-delay: .25s;
-}
-
-.Card:nth-child(7) {
-    animation-delay: .3s;
-}
-
-.Card:nth-child(8) {
-    animation-delay: .35s;
-}
-
-.Card:nth-child(9) {
-    animation-delay: .4s;
-}
-
-.Card:nth-child(10) {
-    animation-delay: .45s;
-}
-
-.Card:nth-child(11) {
-    animation-delay: .5s;
-}
-
-.Card:nth-child(12) {
-    animation-delay: .55s;
 }

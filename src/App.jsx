@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react'
 import { Card } from './Card/Card'
 
 function App() {
-  const cardCount = 12;
+  const cardCount = 24;
   const [mons, setMons] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [loadedCount, setLoadedCount] = useState(0);
@@ -80,13 +80,18 @@ function App() {
     return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.other["official-artwork"].front_default };
   }
 
+  function getCardDelay() {
+
+  }
+
   const cards =
     <div className="card-container">
-      {mons.map((mon) => (
+      {mons.map((mon, index) => (
         <Card
           key={mon.index}
           mon={mon}
           onLoad={() => { setLoadedCount(prev => prev + 1); }}
+          style={{ animationDelay: `${index * 0.025}s` }}
         />
       ))}
     </div>
