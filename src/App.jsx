@@ -13,7 +13,7 @@
 //add dark mode support?
 
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { Card } from './Card/Card'
 
 function App() {
@@ -36,33 +36,39 @@ function App() {
       return acc;
     }, []);
 
-    console.log(flippedIndexes);
-
     if (flippedIndexes.length === 2) {
       const [firstIndex, secondIndex] = flippedIndexes;
       const firstCard = mons[firstIndex];
       const secondCard = mons[secondIndex];
-      
+
       if (firstCard && secondCard && firstCard.name === secondCard.name) {
-        console.log("Match!");
         setMatchedCards(prev => {
           const newMatches = [...prev];
           newMatches[firstIndex] = true;
           newMatches[secondIndex] = true;
           return newMatches;
-        })
+        });
       } else {
         setTimeout(() => {
-        setCardFlips(prev => {
-          const newFlips = [...prev];
-          newFlips[firstIndex] = false;
-          newFlips[secondIndex] = false;
-          return newFlips;
-        });
-      }, 1000);
+          setCardFlips(prev => {
+            const newFlips = [...prev];
+            newFlips[firstIndex] = false;
+            newFlips[secondIndex] = false;
+            return newFlips;
+          });
+        }, 1000);
       }
     }
-  }, [cardFlips, mons]);
+  }, [cardFlips, mons, matchedCards]);
+
+function preloadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = src;
+    img.onload = resolve;
+    img.onerror = reject;
+  })
+}
 
   useEffect(() => {
     async function loadCards() {
@@ -79,8 +85,9 @@ function App() {
       const promises = shuffledIds.map(id => getRandomPokemon(id));
       const monData = await Promise.all(promises);
 
-      monData.forEach(mon => mon.index = crypto.randomUUID());
+      await Promise.all(monData.map(mon => preloadImage(mon.sprite)));
 
+      monData.forEach(mon => mon.index = crypto.randomUUID());
       setMons(monData);
     }
     loadCards();

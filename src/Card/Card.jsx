@@ -1,6 +1,6 @@
 import './Card.css';
 
-function Card({ mon, onLoad, style, isFaceDown, onClick }) {
+function Card({ mon, style, isFaceDown, onClick }) {
     const typeColors = {
         normal: "A8A77A",
         fire: "EE8130",
@@ -40,13 +40,12 @@ function Card({ mon, onLoad, style, isFaceDown, onClick }) {
 
     return (
         isFaceDown ? (
-            <div className="Card facedown" onClick={onClick}></div>
+            <div className="Card facedown confetti" onClick={onClick} style={style}></div>
         ) : (
-            <div className="Card faceup" style={{ ...getBackgroundStyle(), ...style }}>
+            <div className="Card faceup confetti" style={{ ...getBackgroundStyle(), ...style }}>
                 <img
                     src={mon.sprite}
                     alt={mon.name}
-                    onLoad={onLoad}
                 />
             </div>
         )
