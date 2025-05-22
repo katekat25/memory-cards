@@ -19,6 +19,8 @@
     font-family: 'Jost', sans-serif;
     font-size: 0.75rem;
     animation: fade-in 0.25s ease-in-out forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
 }
 
 .card-inner {
@@ -27,6 +29,7 @@
     transition: transform 0.6s;
     transform-style: preserve-3d;
     position: relative;
+
 }
 
 .card.flipped .card-inner {
@@ -41,8 +44,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
     overflow: hidden;
+
 }
 
 .card-face.front {
@@ -57,6 +60,9 @@
 .card:hover {
     transform: scale(1.05);
     z-index: 10;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
+        rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+        rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
 }
 
 .card img {
