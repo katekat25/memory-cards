@@ -1,5 +1,4 @@
 //todos:
-//can we just make this a fucking normal memory game please? ~we have the technology~
 //make modal slide in that explains rules
 
 //to make it normal memory:
@@ -17,6 +16,7 @@ import Confetti from 'react-confetti'
 
 function App() {
   const cardCount = 24;
+  let bestScore = null;
   const { width, height } = useWindowSize();
 
   const [mons, setMons] = useState([]);
@@ -24,6 +24,7 @@ function App() {
   const [matchedCards, setMatchedCards] = useState(Array(cardCount).fill(false));
   const [isExploding, setIsExploding] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState({ x: width / 2, y: height / 2 });
+  const [moves, setMoves] = useState(0);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -97,15 +98,6 @@ function App() {
     loadCards();
   }, []);
 
-  // useEffect(() => {
-  //   if (isExploding) {
-  //     const timeout = setTimeout(() => {
-  //       setIsExploding(false);
-  //     }, 500); // 500ms burst duration
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [isExploding]);
-
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
     if (!response.ok) {
@@ -135,15 +127,18 @@ function App() {
           style={{ animationDelay: `${index * 0.025}s` }}
           isFaceDown={!cardFlips[index]}
           onClick={(e) => {
-            console.log(`Clicked card ${index}`);
-            const x = e.clientX;
-            const y = e.clientY;
-            setCardFlips(prev => {
-              const newFlips = [...prev];
-              newFlips[index] = true;
-              return newFlips;
-            });
-            setConfettiOrigin({ x, y });
+            if (cardFlips[index] === false) {
+              console.log(`Clicked card ${index}`);
+              setMoves(moves => moves + 1);
+              const x = e.clientX;
+              const y = e.clientY;
+              setCardFlips(prev => {
+                const newFlips = [...prev];
+                newFlips[index] = true;
+                return newFlips;
+              });
+              setConfettiOrigin({ x, y });
+            }
           }}
         />
       ))}
@@ -155,9 +150,9 @@ function App() {
         width={width}
         height={height}
         confettiSource={{ x: confettiOrigin.x, y: confettiOrigin.y, w: 0, h: 0 }}
-        numberOfPieces={50}     
-        gravity={.3}             
-        initialVelocity={{ x:200, y: 200 }} 
+        numberOfPieces={50}
+        gravity={.3}
+        initialVelocity={{ x: 200, y: 200 }}
         friction={1.01}
         recycle={false}
         tweenDuration={100}
@@ -165,6 +160,8 @@ function App() {
       />
     )}
     {cards}
+    <p>Total moves: {moves}</p>
+    {bestScore && <p>Best score: {bestScore}</p>}
   </>
 }
 
