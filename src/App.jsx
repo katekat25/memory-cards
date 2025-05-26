@@ -231,7 +231,7 @@ function App() {
       {loading ? (
         <div className="loading-container">
           {/* Loading gif from loading.io */}
-          <img src="src/assets/loading.gif" />
+          <img src="/loading.gif" />
         </div>
       ) : (
         cards
