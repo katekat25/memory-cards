@@ -44,9 +44,13 @@ function App() {
   useEffect(() => {
     if (matchedCards.every(value => value === true)) {
       setGameComplete(true);
-      setBestScore(moves);
+      if (bestScore === null) {
+        setBestScore(moves);
+      } else if (moves < bestScore) {
+        setBestScore(moves);
+      }
     }
-  }, [matchedCards, moves]);
+  }, [matchedCards, moves, bestScore]);
 
   useEffect(() => {
     let flippedIndexes = cardFlips.reduce((acc, flipped, index) => {
