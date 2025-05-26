@@ -86,6 +86,7 @@ function App() {
   }, []);
 
   const loadCards = useCallback(async () => {
+    console.log("Loading cards...");
     let totalMons = await getPokemonCount();
     const randomIds = new Set();
 
@@ -102,6 +103,7 @@ function App() {
 
     monData.forEach(mon => mon.index = crypto.randomUUID());
     setMons(monData);
+    console.log("Cards set");
   }, []);
 
   function preloadImage(src) {
