@@ -230,7 +230,8 @@ function App() {
       {sidebar}
       {loading ? (
         <div className="loading-container">
-          <img src="src/assets/loading.gif" />
+          {/* Loading gif from loading.io */}
+          <img src="public/loading.gif" />
         </div>
       ) : (
         cards
