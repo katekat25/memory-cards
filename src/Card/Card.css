@@ -80,9 +80,14 @@
     max-height: 100%;
     object-fit: contain;
     will-change: transform;
+    -khtml-user-select: none;
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .card.fade-out {
-  animation: fade-out 0.25s ease-in-out forwards;
-  pointer-events: none;
+    animation: fade-out 0.25s ease-in-out forwards;
+    pointer-events: none;
 }
