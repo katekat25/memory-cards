@@ -138,7 +138,7 @@ function App() {
   }
 
   function resetGame() {
-    setIsResetting(true); 
+    setIsResetting(true);
     setCardFlips(Array(cardCount).fill(false));
     setMatchedCards(Array(cardCount).fill(false));
     setGameComplete(false);
@@ -146,14 +146,9 @@ function App() {
 
     setTimeout(() => {
       setMons([]);
-
-      setTimeout(() => {
-        loadCards();
-        setTimeout(() => {
-          setIsResetting(false);
-        }, 50);
-      }, 50);
-    }, 250);
+      loadCards();
+      setIsResetting(false);
+    }, 350);
   }
 
 
