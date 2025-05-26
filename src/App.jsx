@@ -29,6 +29,7 @@ function App() {
   const [bestScore, setBestScore] = useState(null);
   const [modalIsOpen, setIsOpen] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
 
   function closeModal() {
     setIsFadingOut(true);
@@ -137,15 +138,27 @@ function App() {
   }
 
   function resetGame() {
-    setMoves(0);
-    setGameComplete(false);
-    setMatchedCards(Array(cardCount).fill(false));
+    setIsResetting(true); 
     setCardFlips(Array(cardCount).fill(false));
-    loadCards();
+    setMatchedCards(Array(cardCount).fill(false));
+    setGameComplete(false);
+    setMoves(0);
+
+    setTimeout(() => {
+      setMons([]);
+
+      setTimeout(() => {
+        loadCards();
+        setTimeout(() => {
+          setIsResetting(false);
+        }, 50);
+      }, 50);
+    }, 250);
   }
 
+
   const cards = (
-    <div className="card-container">
+    <div className={`card-container ${isResetting ? "fade-out hidden" : ""}`}>
       {mons.map((mon, index) => (
         <Card
           key={mon.index}
@@ -153,17 +166,14 @@ function App() {
           style={{ animationDelay: `${index * 0.025}s` }}
           isFaceDown={!cardFlips[index]}
           onClick={(e) => {
-            if (cardFlips[index] === false) {
-              console.log(`Clicked card ${index}`);
-              setMoves(moves => moves + 1);
-              const x = e.clientX;
-              const y = e.clientY;
+            if (!cardFlips[index]) {
+              setMoves(m => m + 1);
               setCardFlips(prev => {
                 const newFlips = [...prev];
                 newFlips[index] = true;
                 return newFlips;
               });
-              setConfettiOrigin({ x, y });
+              setConfettiOrigin({ x: e.clientX, y: e.clientY });
             }
           }}
         />

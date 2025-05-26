@@ -1,6 +1,6 @@
 import './Card.css';
 
-function Card({ mon, style, isFaceDown, onClick }) {
+function Card({ mon, style, isFaceDown, onClick, className = '' }) {
     const typeColors = {
         normal: "A8A77A",
         fire: "EE8130",
@@ -39,7 +39,7 @@ function Card({ mon, style, isFaceDown, onClick }) {
     }
 
     return (
-        <div className={`card ${isFaceDown ? 'flipped' : ''}`} style={style} onClick={onClick}>
+        <div className={`card ${isFaceDown ? 'flipped' : ''} ${className}`} style={style} onClick={onClick}>
             <div className="card-inner">
                 <div className="card-face front" style={getBackgroundStyle()}>
                     <img src={mon.sprite} alt={mon.name} />
