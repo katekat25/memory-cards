@@ -14,6 +14,17 @@
   }
 }
 
+@keyframes fade-out {
+  from {
+    opacity: 1;
+    /* transform: translateY(0); */
+  }
+  to {
+    opacity: 0;
+    /* transform: translateY(10px); */
+  }
+}
+
 .card-container {
   width: auto;
   display: grid;
@@ -64,4 +75,47 @@ button {
 
 button:hover {
   background-color: rgb(249, 250, 251);
+}
+
+.modal {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin-right: -50%;
+  width: 400px;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 2rem;
+  border: 1px solid grey;
+  animation: fade-in 0.5s ease-in-out forwards;
+  animation-delay: 1.5s;
+}
+
+.modal-overlay {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  animation: fade-in 0.5s ease-in-out forwards;
+  animation-delay: 1.5s;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-exit {
+  animation: fade-out 0.25s ease-in-out forwards;
+}
+
+.modal-overlay-exit {
+  animation: fade-out 0.25s ease-in-out forwards;
 }

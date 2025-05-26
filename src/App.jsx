@@ -9,9 +9,12 @@
 
 import './App.css'
 import { useState, useEffect, useCallback } from 'react';
+import Modal from 'react-modal';
 import { Card } from './Card/Card'
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
+
+Modal.setAppElement('#root');
 
 function App() {
   const cardCount = 24;
@@ -25,6 +28,8 @@ function App() {
   const [moves, setMoves] = useState(0);
   const [gameComplete, setGameComplete] = useState(false);
   const [bestScore, setBestScore] = useState(null);
+  const [modalIsOpen, setIsOpen] = useState(true);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -32,6 +37,14 @@ function App() {
       [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+  }
+
+  function closeModal() {
+    setIsFadingOut(true);
+    setTimeout(() => {
+      setIsOpen(false);
+      setIsFadingOut(false);
+    }, 250);
   }
 
   useEffect(() => {
@@ -168,7 +181,7 @@ function App() {
 
   const sidebar = (
     <div className="sidebar"
-      style={{ animationDelay: `${(cardCount * 0.025) + 0.5}s` }}>
+      style={{ animationDelay: `${(cardCount * 0.025) + 0.25}s` }}>
       <p>Total moves: {moves}</p>
       <p>Best score: {bestScore}</p>
       <button onClick={resetGame}>
@@ -178,6 +191,21 @@ function App() {
   );
 
   return <div className="container">
+    <Modal
+      isOpen={modalIsOpen}
+      onRequestClose={closeModal}
+      className={`modal ${isFadingOut ? 'modal-exit' : ''}`}
+      overlayClassName={`modal-overlay ${isFadingOut ? 'modal-overlay-exit' : ''}`}
+      contentLabel="Game Instructions"
+      shouldCloseOnOverlayClick={false}
+    >
+      <div className="modal-content">
+        <h2>How to Play</h2>
+        <p>Click on any card to flip it over and reveal a Pokémon. Then, click another card to try and find its match. If the two cards match, they’ll stay face up. Keep going until you’ve matched all the Pokémon, and try to win in as few moves as possible!</p>
+        <button onClick={closeModal}>Start Game</button>
+      </div>
+    </Modal>
+
     {isExploding && (
       <Confetti
         width={width}
