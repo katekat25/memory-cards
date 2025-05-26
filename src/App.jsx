@@ -30,6 +30,8 @@ function App() {
   const [modalIsOpen, setIsOpen] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [loading, setLoading] = useState(true);
+
 
   function closeModal() {
     setIsFadingOut(true);
@@ -87,6 +89,8 @@ function App() {
 
   const loadCards = useCallback(async () => {
     console.log("Loading cards...");
+    setLoading(true);
+
     let totalMons = await getPokemonCount();
     const randomIds = new Set();
 
@@ -103,8 +107,11 @@ function App() {
 
     monData.forEach(mon => mon.index = crypto.randomUUID());
     setMons(monData);
+    setLoading(false);
     console.log("Cards set");
   }, []);
+
+
 
   function preloadImage(src) {
     return new Promise((resolve, reject) => {
@@ -221,7 +228,14 @@ function App() {
       )}
 
       {sidebar}
-      {cards}
+      {loading ? (
+        <div className="loading-container">
+          <img src="src/assets/loading.gif" />
+        </div>
+      ) : (
+        cards
+      )}
+
     </div>
   );
 }
