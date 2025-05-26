@@ -2,7 +2,6 @@
 //make modal slide in that explains rules
 
 //to make it normal memory:
-//track score in App
 //add reset game button, etc
 
 //add japanese support!
@@ -46,7 +45,10 @@ function App() {
       const secondCard = mons[secondIndex];
 
       if (firstCard && secondCard && firstCard.name === secondCard.name) {
-        setIsExploding(true);
+        setIsExploding(false);
+        setTimeout(() => {
+          setIsExploding(true);
+        }, 10);
         setMatchedCards(prev => {
           const newMatches = [...prev];
           newMatches[firstIndex] = true;
@@ -86,8 +88,8 @@ function App() {
       }
 
       const duplicatedIds = Array.from(randomIds).flatMap(id => [id, id]);
-      const shuffledIds = shuffleArray(duplicatedIds);
-      const promises = shuffledIds.map(id => getRandomPokemon(id));
+      const promises = shuffleArray(duplicatedIds)
+        .map(id => getRandomPokemon(id));
       const monData = await Promise.all(promises);
 
       await Promise.all(monData.map(mon => preloadImage(mon.sprite)));
