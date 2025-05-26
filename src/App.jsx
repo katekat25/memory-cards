@@ -1,12 +1,3 @@
-//todos:
-//make modal slide in that explains rules
-
-//to make it normal memory:
-//add reset game button, etc
-
-//add japanese support!
-//add dark mode support?
-
 import './App.css'
 import { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
@@ -15,6 +6,14 @@ import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 
 Modal.setAppElement('#root');
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
 
 function App() {
   const cardCount = 24;
@@ -31,14 +30,6 @@ function App() {
   const [modalIsOpen, setIsOpen] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
-
   function closeModal() {
     setIsFadingOut(true);
     setTimeout(() => {
@@ -52,7 +43,7 @@ function App() {
       setGameComplete(true);
       setBestScore(moves);
     }
-  }, [matchedCards, moves])
+  }, [matchedCards, moves]);
 
   useEffect(() => {
     let flippedIndexes = cardFlips.reduce((acc, flipped, index) => {
@@ -89,14 +80,9 @@ function App() {
     }
   }, [cardFlips, mons, matchedCards]);
 
-  function preloadImage(src) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = src;
-      img.onload = resolve;
-      img.onerror = reject;
-    })
-  }
+  useEffect(() => {
+    loadCards();
+  }, []);
 
   const loadCards = useCallback(async () => {
     let totalMons = await getPokemonCount();
@@ -117,14 +103,19 @@ function App() {
     setMons(monData);
   }, []);
 
-  useEffect(() => {
-    loadCards();
-  }, [loadCards]);
+  function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = resolve;
+      img.onerror = reject;
+    });
+  }
 
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
     if (!response.ok) {
-      throw new Error(`Error fetching Pokemon count, status: ${response.status}`)
+      throw new Error(`Error fetching Pokemon count, status: ${response.status}`);
     }
     const data = await response.json();
     return data.count;
@@ -133,7 +124,7 @@ function App() {
   async function getRandomPokemon(dexNumber) {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${dexNumber}`, { mode: "cors" });
     if (!response.ok) {
-      throw new Error(`Error fetching Pokemon, status: ${response.status}`)
+      throw new Error(`Error fetching Pokemon, status: ${response.status}`);
     }
     const data = await response.json();
 
@@ -153,7 +144,7 @@ function App() {
     loadCards();
   }
 
-  const cards =
+  const cards = (
     <div className="card-container">
       {mons.map((mon, index) => (
         <Card
@@ -178,10 +169,10 @@ function App() {
         />
       ))}
     </div>
+  );
 
   const sidebar = (
-    <div className="sidebar"
-      style={{ animationDelay: `${(cardCount * 0.025) + 0.25}s` }}>
+    <div className="sidebar" style={{ animationDelay: `${(cardCount * 0.025) + 0.25}s` }}>
       <p>Total moves: {moves}</p>
       <p>Best score: {bestScore}</p>
       <button onClick={resetGame}>
@@ -190,39 +181,42 @@ function App() {
     </div>
   );
 
-  return <div className="container">
-    <Modal
-      isOpen={modalIsOpen}
-      onRequestClose={closeModal}
-      className={`modal ${isFadingOut ? 'modal-exit' : ''}`}
-      overlayClassName={`modal-overlay ${isFadingOut ? 'modal-overlay-exit' : ''}`}
-      contentLabel="Game Instructions"
-      shouldCloseOnOverlayClick={false}
-    >
-      <div className="modal-content">
-        <h2>How to Play</h2>
-        <p>Click on any card to flip it over and reveal a Pokémon. Then, click another card to try and find its match. If the two cards match, they’ll stay face up. Keep going until you’ve matched all the Pokémon, and try to win in as few moves as possible!</p>
-        <button onClick={closeModal}>Start Game</button>
-      </div>
-    </Modal>
+  return (
+    <div className="container">
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        className={`modal ${isFadingOut ? 'modal-exit' : ''}`}
+        overlayClassName={`modal-overlay ${isFadingOut ? 'modal-overlay-exit' : ''}`}
+        contentLabel="Game Instructions"
+        shouldCloseOnOverlayClick={false}
+      >
+        <div className="modal-content">
+          <h2>How to Play</h2>
+          <p>Click on any card to flip it over and reveal a Pokémon. Then, click another card to try and find its match. If the two cards match, they’ll stay face up. Keep going until you’ve matched all the Pokémon, and try to win in as few moves as possible!</p>
+          <button onClick={closeModal}>Start Game</button>
+        </div>
+      </Modal>
 
-    {isExploding && (
-      <Confetti
-        width={width}
-        height={height}
-        confettiSource={{ x: confettiOrigin.x, y: confettiOrigin.y, w: 0, h: 0 }}
-        numberOfPieces={50}
-        gravity={.3}
-        initialVelocity={{ x: 200, y: 200 }}
-        friction={1.01}
-        recycle={false}
-        tweenDuration={100}
-        onConfettiComplete={() => setIsExploding(false)}
-      />
-    )}
-    {sidebar}
-    {cards}
-  </div>
+      {isExploding && (
+        <Confetti
+          width={width}
+          height={height}
+          confettiSource={{ x: confettiOrigin.x, y: confettiOrigin.y, w: 0, h: 0 }}
+          numberOfPieces={50}
+          gravity={.3}
+          initialVelocity={{ x: 200, y: 200 }}
+          friction={1.01}
+          recycle={false}
+          tweenDuration={100}
+          onConfettiComplete={() => setIsExploding(false)}
+        />
+      )}
+
+      {sidebar}
+      {cards}
+    </div>
+  );
 }
 
-export default App
+export default App;
