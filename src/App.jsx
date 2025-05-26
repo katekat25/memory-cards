@@ -8,14 +8,13 @@
 //add dark mode support?
 
 import './App.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card } from './Card/Card'
 import { useWindowSize } from 'react-use'
 import Confetti from 'react-confetti'
 
 function App() {
   const cardCount = 24;
-  let bestScore = null;
   const { width, height } = useWindowSize();
 
   const [mons, setMons] = useState([]);
@@ -24,6 +23,8 @@ function App() {
   const [isExploding, setIsExploding] = useState(false);
   const [confettiOrigin, setConfettiOrigin] = useState({ x: width / 2, y: height / 2 });
   const [moves, setMoves] = useState(0);
+  const [gameComplete, setGameComplete] = useState(false);
+  const [bestScore, setBestScore] = useState(null);
 
   function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -32,6 +33,13 @@ function App() {
     }
     return array;
   }
+
+  useEffect(() => {
+    if (matchedCards.every(value => value === true)) {
+      setGameComplete(true);
+      setBestScore(moves);
+    }
+  }, [matchedCards, moves])
 
   useEffect(() => {
     let flippedIndexes = cardFlips.reduce((acc, flipped, index) => {
@@ -77,28 +85,28 @@ function App() {
     })
   }
 
-  useEffect(() => {
-    async function loadCards() {
-      let totalMons = await getPokemonCount();
-      const randomIds = new Set()
+  const loadCards = useCallback(async () => {
+    let totalMons = await getPokemonCount();
+    const randomIds = new Set();
 
-      while (randomIds.size < (cardCount / 2)) {
-        let r = Math.floor(Math.random() * totalMons) + 1;
-        randomIds.add(r);
-      }
-
-      const duplicatedIds = Array.from(randomIds).flatMap(id => [id, id]);
-      const promises = shuffleArray(duplicatedIds)
-        .map(id => getRandomPokemon(id));
-      const monData = await Promise.all(promises);
-
-      await Promise.all(monData.map(mon => preloadImage(mon.sprite)));
-
-      monData.forEach(mon => mon.index = crypto.randomUUID());
-      setMons(monData);
+    while (randomIds.size < (cardCount / 2)) {
+      let r = Math.floor(Math.random() * totalMons) + 1;
+      randomIds.add(r);
     }
-    loadCards();
+
+    const duplicatedIds = Array.from(randomIds).flatMap(id => [id, id]);
+    const promises = shuffleArray(duplicatedIds).map(id => getRandomPokemon(id));
+    const monData = await Promise.all(promises);
+
+    await Promise.all(monData.map(mon => preloadImage(mon.sprite)));
+
+    monData.forEach(mon => mon.index = crypto.randomUUID());
+    setMons(monData);
   }, []);
+
+  useEffect(() => {
+    loadCards();
+  }, [loadCards]);
 
   async function getPokemonCount() {
     const response = await fetch('https://pokeapi.co/api/v2/pokemon-species/', { mode: "cors" });
@@ -117,7 +125,19 @@ function App() {
     const data = await response.json();
 
     const unhyphenatedName = data.name.replace("-", " ");
-    return { name: unhyphenatedName, types: data.types.map(t => t.type.name), sprite: data.sprites.other["official-artwork"].front_default };
+    return {
+      name: unhyphenatedName,
+      types: data.types.map(t => t.type.name),
+      sprite: data.sprites.other["official-artwork"].front_default
+    };
+  }
+
+  function resetGame() {
+    setMoves(0);
+    setGameComplete(false);
+    setMatchedCards(Array(cardCount).fill(false));
+    setCardFlips(Array(cardCount).fill(false));
+    loadCards();
   }
 
   const cards =
@@ -146,6 +166,16 @@ function App() {
       ))}
     </div>
 
+  const sidebar = (
+    <div>
+      <button onClick={resetGame}>
+        {gameComplete ? "New game" : "Reset game"}
+      </button>
+      <p>Total moves: {moves}</p>
+      {bestScore !== null && <p>Best score: {bestScore}</p>}
+    </div>
+  );
+
   return <>
     {isExploding && (
       <Confetti
@@ -161,9 +191,8 @@ function App() {
         onConfettiComplete={() => setIsExploding(false)}
       />
     )}
+    {sidebar}
     {cards}
-    <p>Total moves: {moves}</p>
-    {bestScore && <p>Best score: {bestScore}</p>}
   </>
 }
 
