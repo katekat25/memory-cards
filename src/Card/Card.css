@@ -21,6 +21,7 @@
     animation: fade-in 0.25s ease-in-out forwards;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .card-inner {
@@ -29,7 +30,6 @@
     transition: transform 0.6s;
     transform-style: preserve-3d;
     position: relative;
-
 }
 
 .card.flipped .card-inner {
@@ -45,7 +45,6 @@
     justify-content: center;
     align-items: center;
     overflow: hidden;
-
 }
 
 .card-face.front {
@@ -55,6 +54,7 @@
 .card-face.back {
     background: #ffabab;
     transform: rotateY(180deg);
+    font-size: 3rem;
 }
 
 .card:hover {

@@ -167,16 +167,17 @@ function App() {
     </div>
 
   const sidebar = (
-    <div>
+    <div className="sidebar"
+      style={{ animationDelay: `${(cardCount * 0.025) + 0.5}s` }}>
+      <p>Total moves: {moves}</p>
+      <p>Best score: {bestScore}</p>
       <button onClick={resetGame}>
         {gameComplete ? "New game" : "Reset game"}
       </button>
-      <p>Total moves: {moves}</p>
-      {bestScore !== null && <p>Best score: {bestScore}</p>}
     </div>
   );
 
-  return <>
+  return <div className="container">
     {isExploding && (
       <Confetti
         width={width}
@@ -193,7 +194,7 @@ function App() {
     )}
     {sidebar}
     {cards}
-  </>
+  </div>
 }
 
 export default App
