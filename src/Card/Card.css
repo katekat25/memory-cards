@@ -68,12 +68,14 @@
     font-size: 3rem;
 }
 
-.card:hover {
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
     transform: scale(1.05);
     z-index: 10;
     box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset,
         rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
         rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+  }
 }
 
 .card img {
@@ -87,4 +89,13 @@
 .card.fade-out {
     animation: fade-out 0.25s ease-in-out forwards;
     pointer-events: none;
+}
+
+@media (min-width: 1000px) {
+    .card {
+        height: auto;
+        width: 100px;
+        max-width: none;
+        aspect-ratio: 4 / 5;
+    }
 }
