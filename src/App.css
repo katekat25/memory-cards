@@ -86,12 +86,6 @@ body {
   box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
 }
 
-/* .card-container,
-.sidebar {
-  width: 100%;
-  max-width: 100%;
-} */
-
 .sidebar p {
   line-height: 0;
 }
@@ -170,9 +164,16 @@ button:hover {
 
 
 @media (min-width: 500px) {
+  .container {
+    justify-content: start;
+  }
   .card-container {
-    width: 85%;
-    grid-template-columns: repeat(6, 1fr);
+    height: 100%;
+    width: 80%;
+    margin: auto;
+  }
+  .sidebar {
+    justify-content: space-around;
   }
 }
 
