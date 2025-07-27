@@ -19,6 +19,7 @@ A card-matching memory game built in React. Flip the cards, find every pair, and
 ## ✨ Features
 - Card flipping animation
 - Matching logic with memory tracking
+- Pokémon images loaded dynamically from the [PokéAPI](https://pokeapi.co/)
 - Confetti celebration for winning
 - Responsive design for mobile & desktop
 - Restart game logic
