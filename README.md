@@ -1,12 +1,38 @@
-# React + Vite
+# Pokémon Memory Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A card-matching memory game built in React. Flip the cards, find every pair, and try to get the lowest score possible!
 
-Currently, two official plugins are available:
+![Game demo](./public/demo.gif)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 [Live Demo on Netlify](https://katekat25-pokecards.netlify.app/)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Technologies Used
+- React
+- JavaScript (ES6+)
+- CSS Modules
+- Vite
+
+---
+
+## ✨ Features
+- Card flipping animation
+- Matching logic with memory tracking
+- Confetti celebration for winning
+- Responsive design for mobile & desktop
+- Restart game logic
+
+---
+
+## 📚 What I Learned
+- Improved React state management and component design
+- Practiced conditional rendering and event handling
+- Learned how to use `useEffect` for game logic
+- Gained experience with deploying React apps using Netlify
+
+---
+
+## 🚧 Future Improvements
+- Create high score tracking with localStorage
+- Animate card shuffle and flip transitions
